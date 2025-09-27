@@ -4,6 +4,29 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 from dotenv import load_dotenv
 
+
+from flask import Flask
+from threading import Thread
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+def run_flask():
+    app.run(host='0.0.0.0', port=8080)
+
+def main_flask():
+    # Start Flask in separate thread
+    Thread(target=run_flask).daemon = True
+    Thread(target=run_flask).start()
+    
+    # Your existing bot code
+    application = Application.builder().token(TOKEN).build()
+    application.run_polling()
+
+
 # Load environment variables
 load_dotenv()
 
